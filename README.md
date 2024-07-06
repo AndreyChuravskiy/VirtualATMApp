@@ -13,3 +13,6 @@ Account Management:
 Blocking Mechanism: Accounts are blocked for 24 hours after three incorrect PIN attempts.
 
 ATM Management: Tracks the total balance available in the ATM and ensures that deposits and withdrawals are reflected in both the ATM and client accounts.
+
+
+All client and ATM data are saved in text files located in the src\resources.
