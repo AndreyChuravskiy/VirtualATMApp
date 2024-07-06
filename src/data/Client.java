@@ -1,8 +1,8 @@
 package data;
 
-import exceptions.ClientDataParseException;
-
 import java.time.LocalDateTime;
+import java.util.Optional;
+import java.util.regex.Pattern;
 
 public class Client {
 
@@ -43,6 +43,14 @@ public class Client {
         return balance;
     }
 
+    public int getFailedAttempts() {
+        return failedAttempts;
+    }
+
+    public LocalDateTime getBlockTime() {
+        return blockTime;
+    }
+
     public boolean checkBlock() {
         if (isBlocked && LocalDateTime.now().isBefore(blockTime.plusDays(1))) {
             return true;
@@ -62,7 +70,6 @@ public class Client {
             if (failedAttempts >= 3) {
                 isBlocked = true;
                 blockTime = LocalDateTime.now();
-            } else {
             }
             return false;
         }
@@ -70,26 +77,59 @@ public class Client {
 
     @Override
     public String toString() {
+        String stringBlockTime;
+        if (blockTime == null) {
+            stringBlockTime = "null";
+        } else {
+            stringBlockTime = blockTime.toString();
+        }
         return cardNumber + "\\" + pinCode + "\\" + balance + "\\" + failedAttempts + "\\" +
-                isBlocked + "\\" + blockTime;
+                isBlocked + "\\" + stringBlockTime;
     }
 
-    public static Client fromString(String clientStr) throws ClientDataParseException {
+    public static Optional<Client> fromString(String clientStr) {
         try {
             String[] parts = clientStr.split("\\\\");
+
             if (parts.length < 6) {
-                throw new ClientDataParseException("Ошибка парсинга данных клиента: недостаточно данных для парсинга");
+                return Optional.empty();
             }
+
             String cardNumber = parts[0];
+            if (!isCardNumberValidate(cardNumber)) {
+                return Optional.empty();
+            }
+
             String pinCode = parts[1];
+            if (!isPinValidate(pinCode)) {
+                return Optional.empty();
+            }
+
             int balance = Integer.parseInt(parts[2]);
             int failedAttempts = Integer.parseInt(parts[3]);
             boolean isBlocked = Boolean.parseBoolean(parts[4]);
-            LocalDateTime blockTime = LocalDateTime.parse(parts[5]);
-            return new Client(cardNumber, pinCode, balance, failedAttempts, isBlocked, blockTime);
+            LocalDateTime blockTime;
+            if (parts[5].equals("null")) {
+                blockTime = null;
+            } else {
+                blockTime = LocalDateTime.parse(parts[5]);
+            }
+
+            return Optional.of(new Client(cardNumber, pinCode, balance, failedAttempts, isBlocked, blockTime));
         } catch (Exception ex) {
-            throw new ClientDataParseException("Ошибка парсинга данных клиента", ex);
+            return Optional.empty();
         }
 
+    }
+
+    public static boolean isCardNumberValidate(String cardNumber) {
+        String regex = "\\d{4}-\\d{4}-\\d{4}-\\d{4}";
+        Pattern pattern = Pattern.compile(regex);
+        return pattern.matcher(cardNumber).matches();
+    }
+
+    public static boolean isPinValidate(String pin) {
+        String regex = "\\d{4}";
+        return Pattern.matches(regex, pin);
     }
 }

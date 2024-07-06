@@ -1,9 +1,6 @@
 package data;
 
-import exceptions.ATMDataParseException;
-import exceptions.ClientDataParseException;
-
-import java.time.LocalDateTime;
+import java.util.Optional;
 
 public class ATMData {
 
@@ -22,12 +19,12 @@ public class ATMData {
         return "" + balance;
     }
 
-    public static ATMData fromString(String ATMStr) throws ATMDataParseException {
+    public static Optional<ATMData> fromString(String ATMStr) {
         try {
             int balance = Integer.parseInt(ATMStr);
-            return new ATMData(balance);
+            return Optional.of(new ATMData(balance));
         } catch (Exception ex) {
-            throw new ATMDataParseException("Ошибка парсинга данных банкомата", ex);
+            return Optional.empty();
         }
 
     }

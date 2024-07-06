@@ -1,37 +1,44 @@
 package utils;
 
 import data.Client;
-import exceptions.ClientDataParseException;
+import exceptions.ClientDataException;
+import io.IOService;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class ClientUtils {
 
-    public static void saveClientsToFile(Client[] clients, String filename) throws IOException {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
+    private static final String FILE_NAME = "src/resources/clients.txt";
+
+    public static void saveClientsToFile(Client[] clients) throws ClientDataException {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME))) {
             for (Client client : clients) {
                 writer.write(client.toString());
                 writer.write(" ");
             }
+        } catch (Exception e) {
+            throw new ClientDataException("Ошибка сохранения данных клиентов в файл", e);
         }
     }
 
-    public static Client[] loadClientsFromFile(String filename) throws IOException {
+    public static Optional<Client[]> loadClientsFromFile() {
         List<Client> clients = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME))) {
             String line = reader.readLine();
             if (line != null) {
                 String[] clientStrings = line.split(" ");
                 for (String clientString : clientStrings) {
-                    clients.add(Client.fromString(clientString));
+                    clients.add(Client.fromString(clientString).orElseThrow(() ->
+                            new ClientDataException("Ошибка парсинга данных клиента")));
                 }
             }
-        } catch (ClientDataParseException e) {
-            System.out.println(e.getMessage());
+            return Optional.of(clients.toArray(new Client[0]));
+        } catch (Exception e) {
+            return Optional.empty();
         }
-        return clients.toArray(new Client[0]);
     }
 
 }
