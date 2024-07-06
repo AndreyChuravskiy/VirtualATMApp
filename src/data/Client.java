@@ -1,5 +1,7 @@
 package data;
 
+import atm.ATM;
+
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.regex.Pattern;
@@ -73,6 +75,36 @@ public class Client {
             }
             return false;
         }
+    }
+
+    public void putMoney(int amount, ATM atm) {
+        if (atm.canDeposit(amount)) {
+            atm.addMoney(amount);
+            balance += amount;
+            atm.display("Счет пополнен");
+        } else {
+            atm.display("Превышен максимальный лимит");
+        }
+    }
+
+    public void withdrawMoney(int amount, ATM atm) {
+        if (hasEnoughMoney(amount)) {
+            if (atm.hasEnoughMoney(amount)) {
+                balance -= amount;
+                atm.removeMoney(amount);
+                atm.display("Выведение средств.....");
+                atm.display("***бжжжж бжжжжж бжжжжж***");
+                atm.display("Средства выведены");
+            } else {
+                atm.display("В банкомате недостаточно средств");
+            }
+        } else {
+            atm.display("На счете недостаточно средств");
+        }
+    }
+
+    public boolean hasEnoughMoney(int amount) {
+        return balance >= amount;
     }
 
     @Override

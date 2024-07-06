@@ -41,12 +41,12 @@ public class ClientMenuState implements ATMState {
             }
             case 2:
             {
-
+                atm.setCurrentState(new WithdrawalOfMoneyState(client));
                 break;
             }
             case 3:
             {
-
+                atm.setCurrentState(new PuttingMoneyState(client));
                 break;
             }
             case 4:

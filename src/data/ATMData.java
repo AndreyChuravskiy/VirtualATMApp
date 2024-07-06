@@ -1,5 +1,7 @@
 package data;
 
+import exceptions.ATMDataException;
+
 import java.util.Optional;
 
 public class ATMData {
@@ -10,8 +12,12 @@ public class ATMData {
         this.balance = balance;
     }
 
-    public ATMData() {
-        this(50000);
+    public int getBalance() {
+        return balance;
+    }
+
+    public void setBalance(int amount) {
+        balance = amount;
     }
 
     @Override
@@ -22,6 +28,7 @@ public class ATMData {
     public static Optional<ATMData> fromString(String ATMStr) {
         try {
             int balance = Integer.parseInt(ATMStr);
+            if (balance < 0) return Optional.empty();
             return Optional.of(new ATMData(balance));
         } catch (Exception ex) {
             return Optional.empty();

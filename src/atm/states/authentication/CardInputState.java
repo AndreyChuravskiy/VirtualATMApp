@@ -37,7 +37,6 @@ public class CardInputState implements ATMState {
             return;
         }
 
-        atm.display("Добро пожаловать");
         atm.setCurrentState(new PinInputState(cardNumber));
     }
 

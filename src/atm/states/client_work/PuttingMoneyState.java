@@ -2,20 +2,19 @@ package atm.states.client_work;
 
 import atm.ATM;
 import atm.states.ATMState;
-import atm.states.RootState;
 import data.Client;
 
-public class WithdrawalOfMoneyState implements ATMState {
+public class PuttingMoneyState implements ATMState {
 
     private Client client;
 
-    public WithdrawalOfMoneyState(Client client) {
+    public PuttingMoneyState(Client client) {
         this.client = client;
     }
 
     @Override
     public void handle(ATM atm) {
-        atm.display("Введите сумму для снятия средств");
+        atm.display("Введите сумму пополнения");
         atm.display("Для возврата в предыдущее меню введите 'back'");
         atm.display("->");
 
@@ -38,7 +37,7 @@ public class WithdrawalOfMoneyState implements ATMState {
             return;
         }
 
-        client.withdrawMoney(count, atm);
+        client.putMoney(count, atm);
         atm.setCurrentState(new ClientMenuState(client));
     }
 }

@@ -46,6 +46,7 @@ public class PinInputState implements ATMState {
             }
         }
 
+        atm.display("Добро пожаловать");
         atm.setCurrentState(new ClientMenuState(client));
     }
 

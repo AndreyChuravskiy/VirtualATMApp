@@ -15,10 +15,17 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ATM {
+
+    private final int MAX_DEPOSIT = 1000000;
+
     private boolean isRunning;
+
     private ATMState currentState;
+
     private Map<String, Client> clients;
+
     private ATMData atmData;
+
     private IOService ioService;
 
     public ATM(IOService ioService) {
@@ -77,6 +84,22 @@ public class ATM {
 
     public void setCurrentState(ATMState currentState) {
         this.currentState = currentState;
+    }
+
+    public void addMoney(int amount) {
+        atmData.setBalance(atmData.getBalance() + amount);
+    }
+
+    public void removeMoney(int amount) {
+        atmData.setBalance(atmData.getBalance() - amount);
+    }
+
+    public boolean canDeposit(int amount) {
+        return amount <= MAX_DEPOSIT;
+    }
+
+    public boolean hasEnoughMoney(int amount) {
+        return atmData.getBalance() >= amount;
     }
 
     public void save() {
