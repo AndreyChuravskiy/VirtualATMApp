@@ -1,0 +1,1 @@
+call java -jar VirtualATMApp.jar

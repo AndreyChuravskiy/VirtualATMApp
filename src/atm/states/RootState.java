@@ -6,7 +6,7 @@ import atm.states.authentication.CardInputState;
 public class RootState implements ATMState{
     @Override
     public void handle(ATM atm) {
-        atm.display("Выберите дальнейшее действие вводом номера пункта:");
+        atm.display("Выберите дальнейшее действие вводом пункта меню:");
 
         atm.display("1-Работа с банковской картой");
         atm.display("2-Выход");

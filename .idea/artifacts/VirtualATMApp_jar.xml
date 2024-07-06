@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="VirtualATMApp:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/VirtualATMApp_jar</output-path>
+    <root id="archive" name="VirtualATMApp.jar">
+      <element id="module-output" name="VirtualATMApp" />
+    </root>
+  </artifact>
+</component>
